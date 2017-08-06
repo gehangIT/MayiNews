@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 上次切换的Fragment
      */
-    private Fragment mContent;
+    private  Fragment mContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
