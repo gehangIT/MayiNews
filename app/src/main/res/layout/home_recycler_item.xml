@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="3dp"
+    android:background="#ffffff"
+    android:orientation="vertical"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+
+            android:id="@+id/item_iv"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:scaleType="fitXY" />
+
+
+    </RelativeLayout>
+
+
+    <TextView
+        android:paddingRight="4dp"
+        android:paddingLeft="4dp"
+            android:paddingTop="8dp"
+             android:maxLines="2"
+            android:id="@+id/item_tv"
+        android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:textSize="14sp"
+             android:textColor="@color/black"
+            android:layout_gravity="center"
+    />
+
+
+<RelativeLayout
+    android:layout_marginLeft="4dp"
+    android:layout_marginRight="4dp"
+    android:layout_marginBottom="5dp"
+    android:layout_marginTop="8dp"
+    android:gravity="center_vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/user"
+        android:maxLength="5"
+        android:textColor="@color/black40"
+        android:text="上传作者"
+        android:textSize="12sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:layout_centerVertical="true"
+        android:id="@+id/spator"
+        android:layout_marginLeft="5dp"
+
+        android:background="@color/black40"
+        android:layout_toRightOf="@+id/user"
+        android:layout_width="1dp"
+        android:layout_height="12dp"
+        android:layout_alignTop="@id/user"
+        android:layout_alignBottom="@id/user"
+
+
+        />
+
+    <TextView
+        android:textColor="@color/black40"
+        android:layout_toRightOf="@+id/spator"
+        android:id="@+id/tv_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:textSize="12sp"
+        android:layout_marginLeft="5dp"
+        android:text="00:10" />
+    <TextView
+        android:textColor="@color/black40"
+        android:textSize="12sp"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"
+        android:id="@+id/playTimes"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <ImageView
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/playTimes"
+        android:layout_marginRight="6dp"
+        android:src="@drawable/public_icon_play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+</RelativeLayout>
+</LinearLayout>

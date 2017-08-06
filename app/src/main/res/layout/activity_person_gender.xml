@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@color/qupai_gray_0xf2"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+
+    tools:context="com.mayinews.mv.user.activity.PersonNickNameActivity">
+    <RelativeLayout
+
+        android:paddingLeft="14dp"
+        android:paddingRight="14dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <ImageView
+            android:layout_centerVertical="true"
+            android:id="@+id/tv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/setting_title_back_selector"
+            android:layout_alignTop="@+id/tv_setting"
+            android:layout_alignParentLeft="true"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="修改性别"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            />
+        <TextView
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="保存"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:id="@+id/tv_save" />
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/gh_gray"/>
+    <RelativeLayout
+        android:id="@+id/rl_gener_male"
+        android:background="@color/white"
+        android:paddingLeft="14dp"
+        android:paddingRight="14dp"
+        android:layout_width="match_parent"
+        android:layout_height="55dp">
+
+        <TextView
+
+            android:layout_centerVertical="true"
+            android:text="男"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/iv_selected_male"
+            android:layout_centerVertical="true"
+            android:src="@drawable/title_icon_opt"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+    <View
+
+        android:layout_marginLeft="14dp"
+        android:layout_marginRight="14dp"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/gh_gray"/>
+    <RelativeLayout
+        android:id="@+id/rl_gener_female"
+        android:background="@color/white"
+        android:paddingLeft="14dp"
+        android:paddingRight="14dp"
+        android:layout_width="match_parent"
+        android:layout_height="55dp">
+
+        <TextView
+
+            android:layout_centerVertical="true"
+            android:text="女"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/iv_selected_female"
+            android:layout_centerVertical="true"
+            android:src="@drawable/title_icon_opt"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+</LinearLayout>

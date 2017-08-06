@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.mayinews.mv.discovery.activity.PublishActivity">
+<RelativeLayout
+    android:padding="10dp"
+    android:background="#ffffff"
+    android:layout_width="match_parent"
+    android:layout_height="50dp">
+    <ImageView
+        android:layout_centerVertical="true"
+        android:src="@mipmap/title_icon_back"
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:textSize="18sp"
+        android:layout_centerInParent="true"
+        android:text="萝卜视频"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/affirm_Publish"
+        android:layout_alignParentRight="true"
+        android:textSize="14sp"
+        android:layout_centerVertical="true"
+        android:text="确认发布"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</RelativeLayout>
+
+    <LinearLayout
+        android:padding="10dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+
+            android:hint="请填写您要的标题"
+            android:id="@+id/title"
+            android:background="@null"
+            android:maxLength="20"
+            android:gravity="top"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginRight="20dp"
+            android:layout_height="80dp" />
+              <RelativeLayout
+                  android:id="@+id/add_rl"
+                  android:layout_width="110dp"
+                  android:layout_height="80dp">
+                  <ImageView
+                        android:layout_centerInParent="true"
+                      android:scaleType="matrix"
+                      android:id="@+id/add"
+                      android:src="@drawable/pubic_icon_add"
+
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content" />
+
+              </RelativeLayout>
+
+
+
+
+
+    </LinearLayout>
+</LinearLayout>

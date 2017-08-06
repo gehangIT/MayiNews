@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="30dp">
+        <ImageView
+            android:layout_marginLeft="8dp"
+            android:src="@drawable/public_icon_pen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_marginLeft="8dp"
+            android:textSize="14sp"
+            android:text="最近更新作者"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+    <View
+        android:background="#e8e8e8"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+    <com.mayinews.mv.discovery.view.MyListView
+        android:divider="@drawable/list_divider"
+        android:id="@+id/update_listView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </com.mayinews.mv.discovery.view.MyListView>
+</LinearLayout>

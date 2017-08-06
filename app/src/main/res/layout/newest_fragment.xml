@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.github.jdsjlzx.recyclerview.LRecyclerView
+        android:id="@+id/lrecyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#E8E8E8"
+
+        android:dividerHeight="10dp">
+
+    </com.github.jdsjlzx.recyclerview.LRecyclerView>
+   <ProgressBar
+       android:id="@+id/head_progressBar"
+       android:visibility="gone"
+       android:indeterminateDrawable="@drawable/anim"
+       android:layout_centerInParent="true"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content" />
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/check_linear"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+        <ImageView
+
+            android:id="@+id/icon_novideo"
+            android:src="@drawable/default_icon_novideo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_marginTop="10dp"
+            android:text="网络不给力，请检查网络后点击重试"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</RelativeLayout>

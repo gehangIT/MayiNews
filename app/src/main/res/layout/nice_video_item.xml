@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_marginBottom="3dp"
+    >
+
+    <fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard
+        android:id="@+id/videoplayer"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"></fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard>
+    <LinearLayout
+        android:background="#ffffff"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+        <ImageView
+            android:src="@mipmap/ic_launcher"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/userIcon"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
+        <TextView
+            android:id="@+id/userName"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical"
+            android:text="隔壁那人不姓王"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+        <ImageView
+
+            android:src="@drawable/pubic_icon_share2"
+            android:layout_width="18dp"
+            android:layout_height="18dp" />
+        <ImageView
+            android:layout_marginLeft="30dp"
+            android:src="@drawable/pubic_icon_share2"
+            android:layout_width="18dp"
+            android:layout_height="18dp" />
+        <ImageView
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/pubic_icon_share2"
+            android:layout_width="18dp"
+            android:layout_height="18dp" />
+    </LinearLayout>
+
+</LinearLayout>

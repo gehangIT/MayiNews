@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:gravity="center_vertical"
+    android:paddingLeft="16dp"
+    android:paddingRight="10dp">
+
+    <ImageView
+        android:layout_centerVertical="true"
+        android:id="@+id/authorIcon"
+        android:src="@mipmap/ic_launcher"
+        android:layout_width="30dp"
+        android:layout_height="30dp" />
+    <TextView
+        android:gravity="center_vertical"
+        android:layout_toRightOf="@id/authorIcon"
+        android:id="@+id/authorName"
+        android:textSize="16sp"
+        android:layout_marginLeft="6dp"
+        android:text="作者名"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" />
+
+    <TextView
+        android:gravity="center_vertical"
+        android:id="@+id/authorAtten"
+        android:textSize="16sp"
+        android:layout_centerVertical="true"
+        android:text="关注"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+</RelativeLayout>

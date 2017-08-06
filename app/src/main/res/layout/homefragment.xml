@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:background="#FFFFFF"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+        <com.gxz.PagerSlidingTabStrip
+            android:id="@+id/tabs"
+
+            android:layout_centerInParent="true"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:textColor="#44000000"
+            android:textSize="14sp"
+            app:pstsDividerColor="@android:color/transparent"
+            app:pstsIndicatorColor="@color/yellow"
+            app:pstsIndicatorHeight="3dp"
+            app:pstsShouldExpand="false"
+            app:pstsUnderlineHeight="2dp"
+            app:pstsScaleZoomMax="0.2"
+            app:pstsTabPaddingLeftRight="8dp"
+            app:pstsSmoothScrollWhenClickTab="false"
+            app:pstsTextSelectedColor="@color/black"
+            app:pstsUnderlineColor="#ffffff">
+
+        </com.gxz.PagerSlidingTabStrip>
+
+
+    </RelativeLayout>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+    </android.support.v4.view.ViewPager>
+</LinearLayout>
