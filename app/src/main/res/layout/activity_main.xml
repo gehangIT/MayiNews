@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
@@ -12,39 +13,47 @@
         android:layout_weight="1"
 
         />
-    <RadioGroup
-        android:background="#ffffff"
-        android:id="@+id/rg_main"
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="1dp"
+        android:background="@color/gh_gray"/>
+    <RadioGroup
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
 
-        <RadioButton
-            android:id="@+id/rb_home"
-            style="@style/MainButtonStyle"
-            android:drawableTop="@drawable/main_selecor"
-            android:text="首页" />
-        <RadioButton
-            android:id="@+id/rb_nice"
-            style="@style/MainButtonStyle"
-            android:drawableTop="@drawable/nice_selecor"
-            android:text="关注"
-            />
-        <!--<RadioButton-->
 
-            <!--android:id="@+id/rb_discover"-->
-            <!--style="@style/MainButtonStyle"-->
-            <!--android:drawableTop="@drawable/discover_selecor"-->
-            <!--android:text="发现"-->
-            <!--/>-->
+    android:background="#ffffff"
+    android:id="@+id/rg_main"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
 
-        <RadioButton
-            android:id="@+id/rb_mine"
-            style="@style/MainButtonStyle"
-            android:drawableTop="@drawable/mine_selecor"
-            android:text="我的"
-            />
-    </RadioGroup>
+    <RadioButton
+        android:id="@+id/rb_home"
+        style="@style/MainButtonStyle"
+        android:drawableTop="@drawable/main_selecor"
+        android:text="@string/homepage" />
+    <RadioButton
+        android:id="@+id/rb_nice"
+        style="@style/MainButtonStyle"
+        android:drawableTop="@drawable/nice_selecor"
+        android:text="@string/attention"
+        />
+    <!--<RadioButton-->
+
+    <!--android:id="@+id/rb_discover"-->
+    <!--style="@style/MainButtonStyle"-->
+    <!--android:drawableTop="@drawable/discover_selecor"-->
+    <!--android:text="发现"-->
+    <!--/>-->
+
+    <RadioButton
+        android:id="@+id/rb_mine"
+        style="@style/MainButtonStyle"
+        android:drawableTop="@drawable/mine_selecor"
+        android:text="@string/mine"
+        />
+</RadioGroup>
 
 
 </LinearLayout>
