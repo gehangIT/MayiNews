@@ -4,6 +4,7 @@
     package="com.mayinews.mv"
     android:versionCode="1"
     android:versionName="1.0">
+
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
     <!-- 蓝牙分享所需的权限 -->
@@ -29,6 +30,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
+
         android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@drawable/app_logo"
@@ -37,6 +39,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
+
             android:name=".activity.MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
@@ -47,19 +50,29 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        android:screenOrientation="portrait"
         <activity android:name=".home.activity.RecordActivity" />
         <activity android:name=".discovery.activity.PublishActivity" />
         <activity
             android:name=".home.activity.AliVideoPlayer"
-            android:configChanges="orientation|keyboard|locale|screenSize|layoutDirection" />
+            android:configChanges="orientation|keyboard|locale|screenSize|layoutDirection"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".home.activity.NoskinVpActivity"
             android:configChanges="orientation|keyboard|locale|screenSize|layoutDirection"
             android:screenOrientation="portrait" />
-        <activity android:name=".user.activity.LoginActivity" />
-        <activity android:name=".user.activity.SettingActivity" />
-        <activity android:name=".user.activity.PersonDataActivity" />
-        <activity android:name=".user.activity.PersonIconActivity" />
+        <activity
+            android:name=".user.activity.LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.activity.SettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.activity.PersonDataActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.activity.PersonIconActivity"
+            android:screenOrientation="portrait" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -71,9 +84,15 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".user.activity.PersonGenderActivity" />
-        <activity android:name=".user.activity.PersonNickNameActivity" />
-        <activity android:name=".user.activity.PersonSignatureActivity"></activity>
+        <activity
+            android:name=".user.activity.PersonGenderActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.activity.PersonNickNameActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.activity.PersonSignatureActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
