@@ -37,6 +37,7 @@ import com.alibaba.sdk.android.vod.upload.VODUploadClientImpl;
 import com.alibaba.sdk.android.vod.upload.model.UploadFileInfo;
 import com.alibaba.sdk.android.vod.upload.model.VodInfo;
 import com.aliyun.common.utils.StorageUtils;
+import com.aliyun.common.utils.ToastUtil;
 import com.aliyun.demo.crop.AliyunVideoCrop;
 import com.aliyun.demo.recorder.AliyunVideoRecorder;
 import com.aliyun.struct.common.VideoQuality;
@@ -406,13 +407,18 @@ public class PublishActivity extends AppCompatActivity implements View.OnClickLi
                     String path = data.getStringExtra(AliyunVideoCrop.RESULT_KEY_CROP_PATH);
                     Toast.makeText(this,"文件路径为 "+ path + " 时长为 " +
                             data.getLongExtra(AliyunVideoCrop.RESULT_KEY_DURATION,0),Toast.LENGTH_SHORT).show();
-                    Bitmap bitmap = getVideoThumbnail(path);
+                    if(path.endsWith(".3gp") || path.endsWith(".mp4")) {
+                        Bitmap bitmap = getVideoThumbnail(path);
 
 //                    add.setImageBitmap(bitmap);
-                    add.setVisibility(View.GONE);
-                    add_rl.setBackground(new BitmapDrawable(bitmap));
-                    uploader.clearFiles();   //先清除上传列表，因为是单个上传
-                    uploader.addFile(path,getVodInfo());
+                        add.setVisibility(View.GONE);
+                        add_rl.setBackground(new BitmapDrawable(bitmap));
+                        uploader.clearFiles();   //先清除上传列表，因为是单个上传
+                        uploader.addFile(path, getVodInfo());
+                    }else{
+
+                        ToastUtil.showToast(this,"请选择正确的视频文件");
+                    }
                 }else if(type ==  AliyunVideoRecorder.RESULT_TYPE_RECORD){
                     Bitmap bitmap = getVideoThumbnail(data.getStringExtra(AliyunVideoRecorder.OUTPUT_PATH));
 

@@ -9,7 +9,13 @@ import android.util.Log;
 
 import com.aliyun.common.httpfinal.QupaiHttpFinal;
 import com.aliyun.vodplayer.downloader.AliyunDownloadManager;
+import com.mayinews.mv.home.bean.LablesBean;
+import com.mayinews.mv.user.activity.LoginActivity;
+import com.mayinews.mv.utils.SPUtils;
 import com.mayinews.mv.utils.StringUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by gary on 2017/6/23 0023.
@@ -24,6 +30,10 @@ public class MyApplication extends  Application{
     public static final String LOGINSTATUES = "loginstatues";
     public static final String SIGNATURE = "signature";  //用户的签名
     public static final String USERICON = "usericon";  //用户的头像地址
+    public static final String LABLES = "lables";  //用户的头像地址
+    public static final String USERUID = "userUid";
+    public static final String PHONENUMBER = "phoneNumber";
+
 
     @Override
     public void onCreate() {
@@ -37,6 +47,7 @@ public class MyApplication extends  Application{
         AliyunDownloadManager.getInstance(this).setDownloadPath(Environment.getExternalStorageDirectory().getAbsolutePath() + "/test_save");
 
             Log.i("TAG","app签名="+ StringUtil.getSign(getApplicationContext()));
+            Log.i("TAG","UID="+ SPUtils.get(this,MyApplication.USERUID,"123"));
 
 
     }

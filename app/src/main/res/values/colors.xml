@@ -5,6 +5,7 @@
     <color name="ivory">#FFFFF0</color><!--象牙色 -->
     <color name="lightyellow">#FFFFE0</color><!--亮黄色 -->
     <color name="yellow">#FFFF00</color><!--黄色 -->
+    <color name="yellow_publish">#FEE36B</color><!--发布评论的黄色 -->
     <color name="snow">#FFFAFA</color><!--雪白色 -->
     <color name="floralwhite">#FFFAF0</color><!--花白色 -->
     <color name="lemonchiffon">#FFFACD</color><!--柠檬绸色 -->
@@ -339,7 +340,7 @@
     <color name="switch_thumb_normal_material_light">#fff1f1f1</color>
     <color name="tab_unselect">#ffc9c9c9</color>
     <color name="transparent10">#1a000000</color>
-    <color name="transparent20">#33000000</color>
+    <color name="transparent20">#99989A</color>
     <color name="transparent30">#4d000000</color>
     <color name="transparent40">#75000000</color>
     <color name="transparent50">#80000000</color>

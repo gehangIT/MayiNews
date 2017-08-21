@@ -22,6 +22,7 @@ import com.bumptech.glide.load.model.LazyHeaders;
 import com.mayinews.mv.R;
 import com.mayinews.mv.home.bean.NewestMediaItem;
 import com.mayinews.mv.home.bean.VideoList;
+import com.mayinews.mv.home.bean.VideoLists;
 import com.mayinews.mv.utils.ScreenUtils;
 
 import java.text.SimpleDateFormat;
@@ -39,11 +40,11 @@ import java.util.zip.Inflater;
 public class MyRcAdapter extends RecyclerView.Adapter<MyRcAdapter.MyViewHolder> {
 
     private Context context;
-    private List<VideoList.DataBean> datas;
+    private List<VideoLists.ResultBean> datas;
     private LayoutInflater inflater;
 
 
-    public MyRcAdapter(Context context, List<VideoList.DataBean> datas) {
+    public MyRcAdapter(Context context, List<VideoLists.ResultBean> datas) {
         this.context = context;
         this.datas = datas;
         inflater = LayoutInflater.from(context);
@@ -76,7 +77,7 @@ public class MyRcAdapter extends RecyclerView.Adapter<MyRcAdapter.MyViewHolder> 
      */
     @Override
     public void onBindViewHolder(MyViewHolder myViewHolder, int i) {
-        VideoList.DataBean dataBean = datas.get(i);
+   VideoLists.ResultBean  dataBean = datas.get(i);
         //用其它图片作为缩略图
         DrawableRequestBuilder<Integer> thumbnailRequest = Glide
                 .with(context)
@@ -85,10 +86,12 @@ public class MyRcAdapter extends RecyclerView.Adapter<MyRcAdapter.MyViewHolder> 
         myViewHolder.title.setText(dataBean.getTitle());
         SimpleDateFormat format=new SimpleDateFormat("mm:ss");
         double v = Double.parseDouble(dataBean.getDuration()) * 1000;
-//        Date data=new Date((long) Double.parseDouble(dataBean.getDuration()));
         String duration = format.format(v);
         myViewHolder.duration.setText(duration);
         myViewHolder.playTimes.setText(dataBean.getView());
+        String user = dataBean.getUser();
+         myViewHolder.userName.setText(user);
+
     }
 
     @Override

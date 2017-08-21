@@ -32,4 +32,7 @@
 
     <string name="wechat_client_inavailable">目前您的微信版本过低或未安装微信，需要安装微信才能使用</string>
     <string name="google_plus_client_inavailable">Google+ 版本过低或者没有安装，需要升级或安装Google+才能使用！</string>
+    <string name="homepage">首页</string>
+    <string name="attention">关注</string>
+    <string name="mine">我的</string>
 </resources>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.mayinews.mv"
     android:versionCode="1"
     android:versionName="1.0">
@@ -30,7 +29,6 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
-
         android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@drawable/app_logo"
@@ -39,7 +37,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
-
             android:name=".activity.MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
@@ -53,10 +50,6 @@
         android:screenOrientation="portrait"
         <activity android:name=".home.activity.RecordActivity" />
         <activity android:name=".discovery.activity.PublishActivity" />
-        <activity
-            android:name=".home.activity.AliVideoPlayer"
-            android:configChanges="orientation|keyboard|locale|screenSize|layoutDirection"
-            android:screenOrientation="portrait" />
         <activity
             android:name=".home.activity.NoskinVpActivity"
             android:configChanges="orientation|keyboard|locale|screenSize|layoutDirection"
@@ -92,7 +85,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".user.activity.PersonSignatureActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
+        <activity android:name=".user.activity.SubActivity"></activity>
     </application>
 
 </manifest>

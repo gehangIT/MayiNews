@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="25dp"
+    android:background="#DDE7E7"
+    android:orientation="vertical">
+<TextView
+    android:textColor="#7DA2CA"
+    android:text="更新了5条视频"
+    android:gravity="center"
+    android:id="@+id/tv_refresf_count"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
+</LinearLayout>

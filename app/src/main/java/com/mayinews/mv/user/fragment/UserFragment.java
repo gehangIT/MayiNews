@@ -21,6 +21,7 @@ import com.mayinews.mv.discovery.activity.PublishActivity;
 import com.mayinews.mv.user.activity.LoginActivity;
 import com.mayinews.mv.user.activity.PersonDataActivity;
 import com.mayinews.mv.user.activity.SettingActivity;
+import com.mayinews.mv.user.activity.SubActivity;
 import com.mayinews.mv.utils.SPUtils;
 import com.mayinews.mv.utils.StringUtil;
 
@@ -47,8 +48,10 @@ public class UserFragment extends BaseFragment implements View.OnClickListener {
     private LinearLayout ll_collectRecord;  // 收藏记录
     private LinearLayout ll_watchRecord;  //观看记录
     private ImageView iv_setting;
-
     private ImageView iv_gender;
+
+    private LinearLayout ll_subscription;
+    private LinearLayout ll_fans;
     @Override
     protected View initView() {
         View view = LayoutInflater.from(mContext).inflate(R.layout.user_fragment, null, false);
@@ -63,14 +66,19 @@ public class UserFragment extends BaseFragment implements View.OnClickListener {
         ll_watchRecord = (LinearLayout) view.findViewById(R.id.ll_watchRecord);
         iv_gender = (ImageView) view.findViewById(R.id.iv_gender);
         tv_signature = (TextView) view.findViewById(R.id.tv_signature);
+        ll_subscription = (LinearLayout) view.findViewById(R.id.ll_subscription);
+        ll_fans = (LinearLayout) view.findViewById(R.id.ll_fans);
 
         //设置监听
         iv_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!isLogin){
+                //得到登录的状态
+                String loginStatues= (String) SPUtils.get(getActivity(), MyApplication.LOGINSTATUES, "0");
+                Log.i("TAG","登录状态="+loginStatues);
+                if(!(loginStatues.equals("1"))){
                     Intent intent=new Intent(getActivity(),LoginActivity.class);
-                    startActivityForResult(intent,USERINFO);
+                    startActivity(intent);
                 }else {
                     //进入个人资料页面
                     Intent intent=new Intent(getActivity(),PersonDataActivity.class);
@@ -83,11 +91,7 @@ public class UserFragment extends BaseFragment implements View.OnClickListener {
             }
         });
 
-        //NDK JNI测试
-//        JNI jni = new JNI();
-//        String string = jni.getString();
-//        Log.i("TAG","STRING="+string);
-//        ToastUtil.showToast(getActivity(),string);
+
 
         iv_setting = (ImageView) view.findViewById(R.id.iv_setting);
         iv_setting.setOnClickListener(this);
@@ -99,6 +103,18 @@ public class UserFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+
+            case R.id.ll_subscription:
+                //打开订阅界面
+                Intent subIntent = new Intent(getActivity(), SubActivity.class);
+
+                break;
+            case R.id.ll_fans:
+
+
+                //打开粉丝界面
+
+                break;
             case  R.id.iv_setting:
                 //打开设置页面
                  Intent intent=new Intent(getActivity(),SettingActivity.class);
@@ -114,37 +130,17 @@ public class UserFragment extends BaseFragment implements View.OnClickListener {
     }
 
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-         Log.i("Tag","onS777");
-
-      if(resultCode==getActivity().RESULT_OK){
-            if(requestCode==USERINFO) {
-                String userName = data.getStringExtra("userName");
-                int fans = data.getIntExtra("fans", 0);
-                int sub = data.getIntExtra("sub", 0);
-                tv_userName.setText(userName);
-                tv_subscribe.setText(sub+"");
-                tv_fans.setText(fans+"");
-
-
-            }
 
 
 
-        }
-    }
 
-
-    @RequiresApi(api = Build.VERSION_CODES.FROYO)
     @Override
     public void onResume() {
         super.onResume();
-
         //得到登录的状态
-
-        if(!isLogin){
+        String loginStatues= (String) SPUtils.get(getActivity(), MyApplication.LOGINSTATUES, "0");
+        Log.i("TAG","登录状态="+loginStatues);
+        if(!(loginStatues.equals("1"))){
 
             tv_userName.setText("点击登录");
             tv_signature.setText("登录之后更精彩");
@@ -158,6 +154,10 @@ public class UserFragment extends BaseFragment implements View.OnClickListener {
             if(!StringUtil.isEmpty(nickName)){
 
                 tv_userName.setText(nickName);
+            }else{
+                String phoneNumber = (String) SPUtils.get(getActivity(),MyApplication.PHONENUMBER,"0");
+                String substring = phoneNumber.substring(7);
+                tv_userName.setText("用户"+substring);
             }
             if(gener.equals("0")){
 

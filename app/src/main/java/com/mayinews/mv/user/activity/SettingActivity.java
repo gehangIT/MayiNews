@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aliyun.common.utils.ToastUtil;
+import com.mayinews.mv.MyApplication;
 import com.mayinews.mv.R;
 import com.mayinews.mv.user.fragment.UserFragment;
 import com.mayinews.mv.utils.DataCleanManager;
@@ -84,12 +85,14 @@ public class SettingActivity extends Activity {
                 ToastUtil.showToast(this,"成功清理缓存");
                 break;
             case R.id.tv_loginOrLogout:
-                 if(UserFragment.isLogin){
+
+                String loginStatus = (String) SPUtils.get(this, MyApplication.SIGNATURE, "0");
+                if(loginStatus.equals("1")){
                     //注销
                      //清除SP，和数据，到登录界面
                      SPUtils.clear(this);
                      finish();
-                     UserFragment.isLogin=false;
+
 
                  }else{
                      //登录  跳转到登录界面

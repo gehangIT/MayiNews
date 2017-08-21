@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="3dp"
+    android:layout_marginBottom="2dp"
     android:background="#ffffff"
     android:orientation="vertical"
     >
@@ -14,11 +14,11 @@
         android:layout_height="wrap_content">
 
         <ImageView
-
+            android:scaleType="fitXY"
             android:id="@+id/item_iv"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:scaleType="fitXY" />
+             />
 
 
     </RelativeLayout>
@@ -57,17 +57,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <View
+    <TextView
+
         android:layout_centerVertical="true"
         android:id="@+id/spator"
-        android:layout_marginLeft="5dp"
-
-        android:background="@color/black40"
+        android:textColor="@color/black40"
+        android:textSize="12sp"
+        android:text="丨"
         android:layout_toRightOf="@+id/user"
-        android:layout_width="1dp"
-        android:layout_height="12dp"
-        android:layout_alignTop="@id/user"
-        android:layout_alignBottom="@id/user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
 
 
         />
@@ -80,7 +80,7 @@
         android:layout_height="wrap_content"
 
         android:textSize="12sp"
-        android:layout_marginLeft="5dp"
+
         android:text="00:10" />
     <TextView
         android:textColor="@color/black40"

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/pop_cancle"
+        android:textSize="16sp"
+        android:textColor="@color/gray_9a9a9a"
+        android:text="取消"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/pop_publish"
+        android:layout_alignParentRight="true"
+        android:textSize="16sp"
+        android:textColor="@color/gray_9a9a9a"
+        android:text="发布"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>
+
+    <ScrollView
+        android:fillViewport="true"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="10dp"
+        android:scrollbars="none">
+
+        <EditText
+            android:id="@+id/et_com"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@null"
+            android:enabled="true"
+            android:focusable="true"
+            android:maxLength="200"
+
+            android:hint="简单说几句"/>
+
+    </ScrollView>
+
+    <RelativeLayout
+        android:layout_marginTop="10dp"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:clickable="true"
+            android:src="@drawable/icon_face_selector"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/pop_fontCount"
+            android:layout_centerInParent="true"
+            android:textSize="12sp"
+            android:text="0"
+            android:layout_toLeftOf="@+id/count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_centerInParent="true"
+            android:textSize="12sp"
+            android:id="@+id/count"
+            android:gravity="center"
+            android:layout_alignParentRight="true"
+            android:text="/200"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+</LinearLayout>

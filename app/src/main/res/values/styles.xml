@@ -18,6 +18,7 @@
         <item name="android:textSize">10sp</item>
         <item name="android:drawablePadding">5dp</item>
         <item name="android:gravity">center</item>
+        <item name="android:background">@android:color/transparent</item>
     </style>
 
     <style name="dialog_style" parent="android:Animation">

@@ -2,8 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants"
+    android:background="@color/white"
     android:orientation="vertical">
     <LinearLayout
+
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -24,6 +27,7 @@
 
 
     <com.mayinews.mv.discovery.view.MyListView
+
         android:divider="@drawable/list_divider"
         android:id="@+id/pinglun_listView"
         android:layout_width="match_parent"

@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
         initFragment();
         setListener();
         rgMain.check(R.id.rb_home);
+
     }
 
     private void initFragment() {
@@ -144,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
                 if (to != null) {
                     ft.show(to).commit();
                 }
+                
             }
         }
 

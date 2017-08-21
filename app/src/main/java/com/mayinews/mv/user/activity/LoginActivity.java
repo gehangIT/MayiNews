@@ -79,7 +79,7 @@ public class LoginActivity extends Activity {
         tv_getAuthorCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String phoneNumber = et_phoneNumber.getText().toString();
+                final String phoneNumber = et_phoneNumber.getText().toString();
                 Log.i("TAG", "phoneNumber=" + phoneNumber);
                 if (!StringUtil.isEmpty(phoneNumber)) {
                     if (StringUtil.isMobile(phoneNumber)) {
@@ -94,7 +94,7 @@ public class LoginActivity extends Activity {
                             /**
                              * 请求验证码
                              */
-                             OkHttpUtils.post().url(Constants.GETAUTHORCODE).addParams("mobile", phoneNumber)
+                            OkHttpUtils.post().url(Constants.GETAUTHORCODE).addParams("mobile", phoneNumber)
                                     .build().execute(new StringCallback() {
                                 @Override
                                 public void onError(Call call, Exception e, int id) {
@@ -106,7 +106,9 @@ public class LoginActivity extends Activity {
                                 public void onResponse(String response, int id) {
                                     //请求成功
                                     Log.i("TAG", "验证码请求成功" + response);
-                                    ToastUtil.showToast(LoginActivity.this, "验证码已发送");
+                                    String substring = phoneNumber.substring(7);
+                                    SPUtils.put(LoginActivity.this,MyApplication.PHONENUMBER,"0");
+                                    ToastUtil.showToast(LoginActivity.this, "验证码已发送至尾号为"+substring+"的手机号");
                                 }
                             });
                         } else {
@@ -167,7 +169,7 @@ public class LoginActivity extends Activity {
                                                  */
                                                 ToastUtil.showToast(LoginActivity.this, "登录成功");
                                                 //向sp中保存个字段，证明是登录状态.0,代表登录，1 代表未登录
-                                                SPUtils.put(LoginActivity.this,MyApplication.LOGINSTATUES,"0");
+                                                SPUtils.put(LoginActivity.this, MyApplication.LOGINSTATUES, "0");
                                                 //获取token
                                                 String token = jsonObject.optString("jwt");
                                                 //从so文件获取key
@@ -192,20 +194,11 @@ public class LoginActivity extends Activity {
                                                 String userid = userInfo.optString("userid");
 
 
-                                                SPUtils.put(LoginActivity.this,MyApplication.USERICON,"....");
-                                                SPUtils.put(LoginActivity.this,MyApplication.NICKNAME,"小学生");
-                                                SPUtils.put(LoginActivity.this,MyApplication.GENDER,"0");
-                                                SPUtils.put(LoginActivity.this,MyApplication.SIGNATURE,"小学生来看搞笑视频了");
+                                                SPUtils.put(LoginActivity.this, MyApplication.USERUID, userid);
 
+                                               //保存登录成功的字段
+                                                SPUtils.put(LoginActivity.this,MyApplication.LOGINSTATUES,"1");
 
-
-                                                Intent intent = getIntent();
-                                                intent.putExtra("userName", "盖航");
-                                                intent.putExtra("fans", 10000);
-                                                intent.putExtra("sub", 200);
-                                                setResult(RESULT_OK, intent);
-
-                                                UserFragment.isLogin=true;
                                                 finish();
 
 
@@ -216,6 +209,7 @@ public class LoginActivity extends Activity {
 
                                                 handler.removeCallbacksAndMessages(null);
                                                 tv_getAuthorCode.setText("获取验证码");
+                                                tv_getAuthorCode.setEnabled(true);
                                                 ToastUtil.showToast(LoginActivity.this, "系统错误,请稍后重试");
                                             }
                                         } catch (JSONException e) {

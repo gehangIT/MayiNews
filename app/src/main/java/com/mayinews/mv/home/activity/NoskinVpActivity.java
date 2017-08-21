@@ -1,15 +1,20 @@
 package com.mayinews.mv.home.activity;
 
+import android.app.Service;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -17,8 +22,12 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -43,10 +52,12 @@ import com.mayinews.mv.R;
 import com.mayinews.mv.home.adapter.VideoDetailAdapter;
 import com.mayinews.mv.home.bean.ItemVideoBean;
 import com.mayinews.mv.home.bean.VideoList;
+import com.mayinews.mv.home.bean.VideoLists;
 import com.mayinews.mv.utils.Constants;
 import com.mayinews.mv.home.utils.Formatter;
 import com.mayinews.mv.utils.DialogUtils;
 import com.mayinews.mv.utils.NetUtils;
+import com.mayinews.mv.utils.StringUtil;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -54,16 +65,19 @@ import java.util.List;
 
 import okhttp3.Call;
 
+import static java.security.AccessController.getContext;
+
 public class NoskinVpActivity extends AppCompatActivity implements View.OnClickListener {
     private ImageView surfaceBackgroud;
     private LinearLayout check_linear;
     private LRecyclerView lrecyclerView;
+    private LinearLayout ll_bottom;
     private LRecyclerViewAdapter mLRecyclerViewAdapter;
     private static final int TIME = 0;
     private static final int HIDDLECONTROL = 1;
     private SurfaceView surfaceView;
     private AliyunVodPlayer aliyunVodPlayer;
-    private VideoList.DataBean datas; //传递过来的item视频bean
+    private VideoLists.ResultBean datas; //传递过来的item视频bean
     private String playAuth;//播放凭证，有失效时间
     private String videoId;//视频的vid
     private RelativeLayout rl;//包含sufface的容器
@@ -78,11 +92,16 @@ public class NoskinVpActivity extends AppCompatActivity implements View.OnClickL
     private TextView title;
     private Boolean isHiddleControl = false;//是否隐藏控制栏
 
-
+    private LinearLayout bottom;
     private SeekBar sb_progressBar;   //进度条
     private TextView tv_currentDuration;    //显示当前所在时长
     private TextView tv_duration;          //显示视频的总时长
     private ImageView iv_changeScreen;     //改变全屏的imageview
+    private ImageView iv_video;
+    private ImageView iv_bottom_back;    //底部返回按钮
+    private Button btn_open_comment;     //打开
+
+    private EditText et_com;//评论pop中的输入框
 
     private Boolean isFullScreen = false;//标记是否全屏
     private Handler handler = new Handler() {
@@ -101,7 +120,8 @@ public class NoskinVpActivity extends AppCompatActivity implements View.OnClickL
 
 
     private boolean isPlayFinished = false;  //标记视频是否播放完成
-    private boolean isReplay=false;
+    private boolean isReplay = false;
+    private List<VideoLists.ResultBean> guessLikeVideos;  //猜你喜欢推荐的相关的视频
 
 
     @Override
@@ -110,12 +130,13 @@ public class NoskinVpActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_noskin_vp);
 
         //得到序列换的
+
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("bundle");
         datas = bundle.getParcelable("dataBean");
 
         surfaceView = (SurfaceView) findViewById(R.id.surfaceView);
-        surfaceBackgroud= (ImageView) findViewById(R.id.surfaceBackgroud);
+        surfaceBackgroud = (ImageView) findViewById(R.id.surfaceBackgroud);
         media_controll = findViewById(R.id.media_controll);
         lrecyclerView = (LRecyclerView) findViewById(R.id.lrecyclerView);
         check_linear = (LinearLayout) findViewById(R.id.check_linear);
@@ -127,14 +148,21 @@ public class NoskinVpActivity extends AppCompatActivity implements View.OnClickL
         tv_duration = (TextView) media_controll.findViewById(R.id.Duration);
         iv_changeScreen = (ImageView) media_controll.findViewById(R.id.changeScreen);
         play_finish = findViewById(R.id.play_finish);
+        bottom = (LinearLayout) findViewById(R.id.bottom);
+        ll_bottom = (LinearLayout)findViewById(R.id.ll_bottom);
+        iv_bottom_back = (ImageView) findViewById(R.id.iv_bottom_back);
         reStart = (ImageView) play_finish.findViewById(R.id.reStart);
         progressBar1 = (ProgressBar) findViewById(R.id.progressBar1);
         progressBar2 = (RelativeLayout) findViewById(R.id.progressBar2);
+        iv_video = (ImageView) findViewById(R.id.iv_video);
+        btn_open_comment = (Button) findViewById(R.id.btn_open_comment);
         rl = (RelativeLayout) findViewById(R.id.rl);
         //控制栏的按钮点击操作
         title_back.setOnClickListener(this);
         iv_playState.setOnClickListener(this);
         iv_changeScreen.setOnClickListener(this);
+        iv_bottom_back.setOnClickListener(this);
+        btn_open_comment.setOnClickListener(this);
         reStart.setOnClickListener(this);
         sb_progressBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -236,6 +264,7 @@ public class NoskinVpActivity extends AppCompatActivity implements View.OnClickL
             return new GlideUrl(url, new LazyHeaders.Builder().addHeader("Referer", "http://mv.mayinews.com").build());
         }
     }
+
     private void initVodPlayer() {
         aliyunVodPlayer = new AliyunVodPlayer(this);
         aliyunVodPlayer.setOnPreparedListener(new IAliyunVodPlayer.OnPreparedListener() {
@@ -250,6 +279,10 @@ public class NoskinVpActivity extends AppCompatActivity implements View.OnClickL
                 showVideoProgressInfo();
 
                 aliyunVodPlayer.start();
+                if (aliyunVodPlayer.isPlaying()) {
+                    iv_video.setVisibility(View.GONE);
+                }
+
             }
         });
         aliyunVodPlayer.setOnErrorListener(new IAliyunVodPlayer.OnErrorListener() {
@@ -289,7 +322,6 @@ public class NoskinVpActivity extends AppCompatActivity implements View.OnClickL
                 Log.d("TAG", "切换清晰度失败。。。" + code + " ,  " + msg);
             }
         });
-
         //滑动seekbar的缓冲的监听
         aliyunVodPlayer.setOnLoadingListener(new IAliyunVodPlayer.OnLoadingListener() {
             @Override
@@ -313,8 +345,6 @@ public class NoskinVpActivity extends AppCompatActivity implements View.OnClickL
 //        aliyunVodPlayer.setDisplay(surfaceView.getHolder());
 
     }
-
-
 
 
     private void playVideo() {
@@ -347,13 +377,13 @@ public class NoskinVpActivity extends AppCompatActivity implements View.OnClickL
                 aliyunAuthInfoBuilder.setQuality(IAliyunVodPlayer.QualityValue.QUALITY_ORIGINAL);
                 aliyunVodPlayer.setAuthInfo(aliyunAuthInfoBuilder.build());
                 //设置surface的回调。此为必须的操作
-               if(isReplay){
-                   if (surfaceView != null) {
-                       //刷新surfaceHolder
-                       surfaceView.setVisibility(View.GONE);
-                       surfaceView.setVisibility(View.VISIBLE);
-                   }
-               }
+                if (isReplay) {
+                    if (surfaceView != null) {
+                        //刷新surfaceHolder
+                        surfaceView.setVisibility(View.GONE);
+                        surfaceView.setVisibility(View.VISIBLE);
+                    }
+                }
                 aliyunVodPlayer.prepareAsync();
             }
         });
@@ -369,6 +399,7 @@ public class NoskinVpActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void outFullScreen() {
+        ll_bottom.setVisibility(View.VISIBLE);  //显示底部
         isFullScreen = false;
         //转为竖屏了。
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -384,6 +415,7 @@ public class NoskinVpActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void IntoFullScreen() {
+        ll_bottom.setVisibility(View.GONE);  //隐藏底部
         isFullScreen = true;
         //设置为全屏
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -472,24 +504,39 @@ public class NoskinVpActivity extends AppCompatActivity implements View.OnClickL
 
     private void initData() {
 
+        progressBar2.setVisibility(View.VISIBLE);
+        Glide.with(this).load(buildGlideUrl(datas.getCover())).into(iv_video);
+        //下面的网络请求。
+         OkHttpUtils.get().url(Constants.PULLDOWNHEQUEST).addParams("qid","0")
+                               .addParams("tag",datas.getCid()).build().execute(new StringCallback() {
+             @Override
+             public void onError(Call call, Exception e, int id) {
 
-          //下面的网络请求。
-        Glide.with(this)
-                .load("http://p.qpic.cn/videoyun/0/2449_bfbbfa3cea8f11e5aac3db03cda99974_1/640");
+             }
 
-        lrecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+             @Override
+             public void onResponse(String response, int id) {
+                 //请求相关视频成功
+                 VideoLists videoLists = JSON.parseObject(response, VideoLists.class);
+
+                  guessLikeVideos = videoLists.getResult();
+                 //执行评论的接口请求
+                 lrecyclerView.setLayoutManager(new LinearLayoutManager(NoskinVpActivity.this, LinearLayoutManager.VERTICAL, false));
+
+                 lrecyclerView.setPullRefreshEnabled(false);
+                 //设置适配器
+                 VideoDetailAdapter adapter = new VideoDetailAdapter(NoskinVpActivity.this, datas,guessLikeVideos);
+                 mLRecyclerViewAdapter = new LRecyclerViewAdapter(adapter);
 
 
-        VideoDetailAdapter adapter = new VideoDetailAdapter(this);
-        mLRecyclerViewAdapter = new LRecyclerViewAdapter(adapter);
-        DividerDecoration divider = new DividerDecoration.Builder(this)
-                .setHeight(R.dimen.default_divider_height)
 
-                .setColorResource(R.color.lightgray)
-                .build();
-        lrecyclerView.addItemDecoration(divider);
-        progressBar2.setVisibility(View.GONE);
-        lrecyclerView.setAdapter(mLRecyclerViewAdapter);
+                 lrecyclerView.setAdapter(mLRecyclerViewAdapter);
+                 progressBar2.setVisibility(View.GONE);
+
+             }
+         });
+
+
 
 
     }
@@ -537,10 +584,10 @@ public class NoskinVpActivity extends AppCompatActivity implements View.OnClickL
                  */
 //                getNetState();
                 AliyunVodPlayer tmpVodPlayer = aliyunVodPlayer;
-                if(tmpVodPlayer != null){
+                if (tmpVodPlayer != null) {
                     tmpVodPlayer.release();
                 }
-                isReplay=true;
+                isReplay = true;
                 aliyunVodPlayer = null;
                 playVideo();
 
@@ -549,11 +596,95 @@ public class NoskinVpActivity extends AppCompatActivity implements View.OnClickL
                 handler.sendEmptyMessageDelayed(HIDDLECONTROL, 4000);
                 break;
 
+            case R.id.btn_open_comment:
+                //打开popupwindow
+
+                showPopwindows();
+                break;
+            case R.id.iv_bottom_back:
+                finish();
+                break;
+
 
         }
 
     }
 
+    private void showPopwindows() {
+        View inflate = View.inflate(this, R.layout.popup_comment, null);
+        et_com = (EditText) inflate.findViewById(R.id.et_com);
+        final TextView pop_fontCount = (TextView) inflate.findViewById(R.id.pop_fontCount);
+        TextView pop_cancle = (TextView) inflate.findViewById(R.id.pop_cancle);
+        final TextView pop_publish = (TextView) inflate.findViewById(R.id.pop_publish);
+
+
+        popupInputMethodWindow(); //显示输入法
+        final PopupWindow popupWindow = new PopupWindow(this);
+        popupWindow.setContentView(inflate);
+        popupWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+        popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setFocusable(true);
+        popupWindow.setBackgroundDrawable((new BitmapDrawable()));
+        View view = View.inflate(this, R.layout.activity_noskin_vp, null);
+        //让popupwindow不被输入法隐藏
+        popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
+
+//        bottom.setVisibility(View.GONE);
+//        lrecyclerView.setBackgroundColor(getResources().getColor(R.color.gh_gray));
+        backgroundAlpha(0.5f);
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+//                lrecyclerView.setBackgroundColor(getResources().getColor(R.color.white));
+                backgroundAlpha(1);
+            }
+        });
+        pop_cancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
+
+        pop_publish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //发布评论、
+                String comment = et_com.getText().toString();
+                if(!StringUtil.isEmpty(comment)){
+                      //判断是否为登录状态
+
+                }else{
+                    Toast.makeText(NoskinVpActivity.this, "请填写你的评论", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        et_com.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() != 0) {
+
+                    pop_publish.setTextColor(getResources().getColor(R.color.yellow_publish));
+                    pop_fontCount.setText(s.length() + "");
+                } else {
+                    pop_publish.setTextColor(getResources().getColor(R.color.gray_9a9a9a));
+                }
+            }
+        });
+
+    }
 
     private void getNetState() {
 
@@ -565,7 +696,7 @@ public class NoskinVpActivity extends AppCompatActivity implements View.OnClickL
             rl.setVisibility(View.VISIBLE);
             initData();
             if (NetUtils.isWifi(this)) {
-               playVideo();
+                playVideo();
             } else {
                 progressBar1.setVisibility(View.GONE);
                 progressBar2.setVisibility(View.GONE);
@@ -596,18 +727,40 @@ public class NoskinVpActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-      if(keyCode==KeyEvent.KEYCODE_BACK && event.getRepeatCount()==0){
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
 
-          if(isFullScreen){
+            if (isFullScreen) {
 
-              outFullScreen();
-              isFullScreen=false;
-          }
+                outFullScreen();
+                isFullScreen = false;
+            }
 
-      }
+        }
         return super.onKeyUp(keyCode, event);
     }
 
+    /**
+     * 弹出输入法窗口
+     */
+    private void popupInputMethodWindow() {
 
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                InputMethodManager systemService = (InputMethodManager) et_com.getContext().getSystemService(Service.INPUT_METHOD_SERVICE);
+                systemService.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+        }).start();
+    }
+    /**
+     * 设置添加屏幕的背景透明度
+     * @param bgAlpha
+     */
+    public void backgroundAlpha(float bgAlpha)
+    {
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = bgAlpha; //0.0-1.0
+        getWindow().setAttributes(lp);
+    }
 
 }
