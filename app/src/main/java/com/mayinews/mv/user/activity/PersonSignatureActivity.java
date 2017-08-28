@@ -8,12 +8,22 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aliyun.common.utils.ToastUtil;
+import com.mayinews.mv.JNI;
 import com.mayinews.mv.MyApplication;
 import com.mayinews.mv.R;
+import com.mayinews.mv.utils.Constants;
 import com.mayinews.mv.utils.SPUtils;
 import com.mayinews.mv.utils.StringUtil;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import okhttp3.Call;
 
 public class PersonSignatureActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -68,19 +78,45 @@ public class PersonSignatureActivity extends AppCompatActivity implements View.O
 
                 break;
             case R.id.tv_save :
-                String s = et_signature.getText().toString();
-                if(!StringUtil.isEmpty(s)){
-                    //请求借口
-                    SPUtils.put(this, MyApplication.SIGNATURE,s);
 
-                    finish();
+                final String s = et_signature.getText().toString();
+                if(!StringUtil.isEmpty(s)){
+                    String key = new JNI().getString();
+                    String token = (String) SPUtils.get(this,key, "");
+                    //请求借口保存
+                    OkHttpUtils.post().url(Constants.SETSIGN)
+                            .addHeader("authorization","Bearer "+token).addParams("desc",s)
+                            .build().execute(new StringCallback() {
+                        @Override
+                        public void onError(Call call, Exception e, int id) {
+                            finish();
+                            Toast.makeText(PersonSignatureActivity.this, "系统错误，请稍后重试", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onResponse(String response, int id) {
+                            try {
+                                JSONObject jsonObject = new JSONObject(response);
+                                int status = jsonObject.optInt("status");
+                                if(status==200){
+                                    //请求借口
+                                    SPUtils.put(PersonSignatureActivity.this, MyApplication.SIGNATURE,s);
+
+                                    finish();
+                                    Toast.makeText(PersonSignatureActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    });
+
 
                 }else{
-                    ToastUtil.showToast(this,"签名不能为空");
-
+                    //
+                    Toast.makeText(PersonSignatureActivity.this, "签名不能为空", Toast.LENGTH_SHORT).show();
                 }
-
-
                 break;
         }
     }

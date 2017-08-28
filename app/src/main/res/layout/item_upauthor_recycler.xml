@@ -1,16 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="220dp"
     android:layout_height="wrap_content"
     android:gravity="center"
+    android:layout_marginLeft="8dp"
+    android:layout_marginBottom="8dp"
+    android:layout_marginRight="8dp"
     android:orientation="vertical">
-  <ImageView
-      android:src="@mipmap/ic_launcher"
-      android:layout_width="match_parent"
-      android:layout_height="200dp" />
-    <TextView
 
-        android:text="wowowowowoowqwdefwewerewwrerw"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+  <ImageView
+
+      android:scaleType="fitXY"
+      android:id="@+id/videoImageView"
+      android:layout_width="match_parent"
+      android:layout_height="180dp"
+      android:src="@mipmap/ic_launcher" />
+
+  <TextView
+      android:id="@+id/videoDesc"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="6dp"
+      android:maxLines="2"
+
+      android:textColor="@color/black"
+      android:textSize="16sp" />
 </LinearLayout>

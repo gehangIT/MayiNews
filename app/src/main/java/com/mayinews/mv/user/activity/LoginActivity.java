@@ -66,6 +66,7 @@ public class LoginActivity extends Activity {
 
     private TextView tv_getAuthorCode;  //获取验证码的textView
     private EditText et_auth_code;  //填写验证码editText
+    private String avatar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +108,7 @@ public class LoginActivity extends Activity {
                                     //请求成功
                                     Log.i("TAG", "验证码请求成功" + response);
                                     String substring = phoneNumber.substring(7);
-                                    SPUtils.put(LoginActivity.this,MyApplication.PHONENUMBER,"0");
+                                    SPUtils.put(LoginActivity.this,MyApplication.PHONENUMBER,phoneNumber);
                                     ToastUtil.showToast(LoginActivity.this, "验证码已发送至尾号为"+substring+"的手机号");
                                 }
                             });
@@ -163,13 +164,13 @@ public class LoginActivity extends Activity {
                                         try {
                                             JSONObject jsonObject = new JSONObject(response);
                                             int status = jsonObject.optInt("status");
-                                            if (status == 1) {
+                                            if (status == 200) {
                                                 /**
                                                  * 保存token
                                                  */
                                                 ToastUtil.showToast(LoginActivity.this, "登录成功");
-                                                //向sp中保存个字段，证明是登录状态.0,代表登录，1 代表未登录
-                                                SPUtils.put(LoginActivity.this, MyApplication.LOGINSTATUES, "0");
+                                                //向sp中保存个字段，证明是登录状态.1代表登录，0代表未登录
+
                                                 //获取token
                                                 String token = jsonObject.optString("jwt");
                                                 //从so文件获取key
@@ -198,8 +199,14 @@ public class LoginActivity extends Activity {
 
                                                //保存登录成功的字段
                                                 SPUtils.put(LoginActivity.this,MyApplication.LOGINSTATUES,"1");
+                                                //保存默认的昵称
+                                                String phoneNumber = (String) SPUtils.get(LoginActivity.this,MyApplication.PHONENUMBER,"0");
+                                                String substring = phoneNumber.substring(7);
+                                                SPUtils.put(LoginActivity.this,MyApplication.NICKNAME,"用户"+substring);
 
-                                                finish();
+
+                                                //请求头像
+                                                getUserIcon(token);
 
 
                                                 Log.i("TAG", "userid==" + userid);
@@ -245,6 +252,36 @@ public class LoginActivity extends Activity {
             }
         });
     }
+
+
+    //请求头像并且保存
+    private void getUserIcon(String token) {
+
+        OkHttpUtils.get().url(Constants.GETUSERICON).addHeader("authorization","Bearer "+"token")
+                .build().execute(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                finish();
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONObject result = jsonObject.optJSONObject("result");
+                     avatar = result.optString("avatar");
+
+                    SPUtils.put(LoginActivity.this,MyApplication.USERICON,avatar);
+                   finish();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+
+
 
 
 }

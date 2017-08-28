@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/white"
     android:orientation="vertical">
 <LinearLayout
     android:gravity="center_vertical"
@@ -21,10 +22,7 @@
          android:layout_height="wrap_content" />
 
 </LinearLayout>
-    <View
-        android:background="#e8e8e8"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"/>
+
 
     <com.mayinews.mv.discovery.view.MyListView
         android:divider="@drawable/list_divider"

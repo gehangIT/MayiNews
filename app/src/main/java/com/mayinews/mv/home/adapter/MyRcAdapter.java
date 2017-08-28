@@ -82,6 +82,10 @@ public class MyRcAdapter extends RecyclerView.Adapter<MyRcAdapter.MyViewHolder> 
         DrawableRequestBuilder<Integer> thumbnailRequest = Glide
                 .with(context)
                 .load(R.drawable.default_icon_head);
+
+        ViewGroup.LayoutParams layoutParams = myViewHolder.imageView.getLayoutParams();
+
+
         Glide.with(context).load(buildGlideUrl(dataBean.getCover())).into(myViewHolder.imageView);
         myViewHolder.title.setText(dataBean.getTitle());
         SimpleDateFormat format=new SimpleDateFormat("mm:ss");
@@ -89,7 +93,7 @@ public class MyRcAdapter extends RecyclerView.Adapter<MyRcAdapter.MyViewHolder> 
         String duration = format.format(v);
         myViewHolder.duration.setText(duration);
         myViewHolder.playTimes.setText(dataBean.getView());
-        String user = dataBean.getUser();
+        String user = dataBean.getNickname();
          myViewHolder.userName.setText(user);
 
     }
@@ -98,7 +102,6 @@ public class MyRcAdapter extends RecyclerView.Adapter<MyRcAdapter.MyViewHolder> 
     public int getItemCount() {
         return datas.size();
     }
-
     private GlideUrl buildGlideUrl(String url) {
         if (TextUtils.isEmpty(url)) {
             return null;

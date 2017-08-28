@@ -8,11 +8,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aliyun.common.utils.ToastUtil;
 import com.mayinews.mv.MyApplication;
 import com.mayinews.mv.R;
-import com.mayinews.mv.user.fragment.UserFragment;
 import com.mayinews.mv.utils.DataCleanManager;
 import com.mayinews.mv.utils.SPUtils;
 
@@ -21,7 +21,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
-public class SettingActivity extends Activity {
+public class SettingActivity extends Activity{
 
     @BindView(R.id.tv_back)
     ImageView tvBack;
@@ -37,20 +37,16 @@ public class SettingActivity extends Activity {
     TextView tvVersionNumber;
     @BindView(R.id.tv_loginOrLogout)
     TextView tvLoginOrLogout;
+    private String status;  //登录状态
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set);
         ButterKnife.bind(this);
-        if(UserFragment.isLogin){
+         status = (String) SPUtils.get(this, MyApplication.LOGINSTATUES, "0");
 
-            tvLoginOrLogout.setText("注销");
-
-        }else{
-
-            tvLoginOrLogout.setText("登录");
-        }
 
         //获取app的缓存大小
         try {
@@ -76,41 +72,57 @@ public class SettingActivity extends Activity {
             case R.id.tv_aboutWe:
 
                 break;
-            case  R.id.tv_cacheSize:
+            case R.id.tv_cacheSize:
 
                 break;
             case R.id.tv_clearCache:   //清理缓存
-              DataCleanManager.clearAllCache(this);
+                DataCleanManager.clearAllCache(this);
                 tvCacheSize.setText("0M");
-                ToastUtil.showToast(this,"成功清理缓存");
+                ToastUtil.showToast(this, "成功清理缓存");
                 break;
             case R.id.tv_loginOrLogout:
 
-                String loginStatus = (String) SPUtils.get(this, MyApplication.SIGNATURE, "0");
-                if(loginStatus.equals("1")){
+                String loginStatus = (String) SPUtils.get(this, MyApplication.LOGINSTATUES, "0");
+                if (loginStatus.equals("1")) {
                     //注销
-                     //清除SP，和数据，到登录界面
-                     SPUtils.clear(this);
-                     finish();
+                    //清除SP，和数据，到登录界面
+                    SPUtils.clear(this);
+                    DataCleanManager.clearAllCache(this);
+                    tvCacheSize.setText("0M");
+                    finish();
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    startActivity(intent);
+
+                } else {
+                    //登录  跳转到登录界面
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    startActivity(intent);
 
 
-                 }else{
-                     //登录  跳转到登录界面
-                     Intent intent=new Intent(this,LoginActivity.class);
-                     startActivity(intent);
-
-
-                 }
+                }
                 break;
             case R.id.tv_shared:
 
+                Toast.makeText(SettingActivity.this, "正在开发中", Toast.LENGTH_SHORT).show();
+
                 break;
-
-
 
         }
 
+      }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (status.equals("1")){
+
+            tvLoginOrLogout.setText("注销");
+
+        } else {
+
+            tvLoginOrLogout.setText("登录");
+        }
     }
 
 }

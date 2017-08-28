@@ -7,6 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/QuSdk-RC/QuSdk-RC.iml" filepath="$PROJECT_DIR$/QuSdk-RC/QuSdk-RC.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/banner/banner.iml" filepath="$PROJECT_DIR$/banner/banner.iml" />
+      <module fileurl="file://$PROJECT_DIR$/base-adapter-library/base-adapter-library.iml" filepath="$PROJECT_DIR$/base-adapter-library/base-adapter-library.iml" />
       <module fileurl="file://$PROJECT_DIR$/compresshelper/compresshelper.iml" filepath="$PROJECT_DIR$/compresshelper/compresshelper.iml" />
     </modules>
   </component>

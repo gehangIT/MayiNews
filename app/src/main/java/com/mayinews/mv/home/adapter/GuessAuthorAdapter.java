@@ -75,7 +75,7 @@ public class GuessAuthorAdapter extends BaseAdapter {
         }
         //设置数据
         viewHolder.videoTitle.setText(resultBean.getTitle());
-        viewHolder.authorName.setText(resultBean.getUser());
+        viewHolder.authorName.setText(resultBean.getNickname());
         viewHolder.viewCount.setText(Number2Thousand.number2Thousand(resultBean.getView())+"次播放");
         Glide.with(context).load(buildGlideUrl(resultBean.getCover())).into(viewHolder.videoImageView);
         SimpleDateFormat format=new SimpleDateFormat("mm:ss");

@@ -57,6 +57,10 @@ dependencies {
     compile files('libs/aliyun-vod-upload-android-sdk.jar')
     compile project(':compresshelper')
     compile project(':QuSdk-RC')
+    compile project(path: ':base-adapter-library')
+    compile('com.alibaba.android:vlayout:1.1.0@aar') {
+        transitive = true
+    }
     compile 'com.android.support.constraint:constraint-layout:1.0.1'
     compile 'com.jakewharton:butterknife:8.6.0'
     compile 'com.zhy:okhttputils:2.6.2'
@@ -75,6 +79,8 @@ dependencies {
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
 }
+
+
 
 
 

@@ -11,9 +11,14 @@ import com.mayinews.mv.R;
 import com.mayinews.mv.discovery.bean.HotAuthorItemBean;
 import com.mayinews.mv.discovery.view.MyListView;
 import com.mayinews.mv.discovery.view.ListViewUtils;
+import com.mayinews.mv.utils.Constants;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
 
 /**
  * Created by gary on 2017/6/24 0024.
@@ -91,10 +96,22 @@ public class MyDcAdapter extends RecyclerView.Adapter {
 
         public void setData() {
             List<HotAuthorItemBean> data = new ArrayList<>();
-            for (int i = 0; i < 3; i++) {
-                HotAuthorItemBean bean = new HotAuthorItemBean("", "小路社会", "看我，我就是热门");
-                data.add(bean);
-            }
+
+              for(int i = 0; i < 30; i++) {
+                  HotAuthorItemBean d = new HotAuthorItemBean("http://static.mayinews.com/Uploads/Picture/video_avatar.png", "作者" + i, "喜欢搞笑小段子");
+                  data.add(d);
+              }
+//            OkHttpUtils.get().url(Constants.VIDEO_LIST).build().execute(new StringCallback() {
+//                @Override
+//                public void onError(Call call, Exception e, int id) {
+//
+//                }
+//
+//                @Override
+//                public void onResponse(String response, int id) {
+//
+//                }
+//            });
             HAListViewAdapter adapter = new HAListViewAdapter(context, data);
             listView.setAdapter(adapter);
 
@@ -144,7 +161,7 @@ public class MyDcAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemCount() {
         //一共有三种，开发时，没写完一种来改变。
-        return 3;
+        return 1;
     }
 
     @Override

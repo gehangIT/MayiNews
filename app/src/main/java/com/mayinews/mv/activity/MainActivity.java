@@ -14,6 +14,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.mayinews.mv.R;
+import com.mayinews.mv.attention.fragment.AttentFragment;
 import com.mayinews.mv.attention.fragment.AttentionFragment;
 import com.mayinews.mv.base.BaseFragment;
 import com.mayinews.mv.discovery.fragment.DiscoveryFragment;
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         mfragments = new ArrayList<>();
         mfragments.add(new HomeFragment());
 //        mfragments.add(new AttentionFragment());
-        mfragments.add(new DiscoveryFragment());
+        mfragments.add(new AttentFragment());
         mfragments.add(new UserFragment());
     }
 

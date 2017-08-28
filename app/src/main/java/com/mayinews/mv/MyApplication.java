@@ -33,6 +33,7 @@ public class MyApplication extends  Application{
     public static final String LABLES = "lables";  //用户的头像地址
     public static final String USERUID = "userUid";
     public static final String PHONENUMBER = "phoneNumber";
+    public static final String VIDEOTAGSJSON = "videoTagsJson";
 
 
     @Override

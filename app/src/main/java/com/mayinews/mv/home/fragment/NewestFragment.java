@@ -9,6 +9,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -20,14 +21,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
+import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.load.model.LazyHeaders;
 import com.github.jdsjlzx.ItemDecoration.DividerDecoration;
 import com.github.jdsjlzx.ItemDecoration.GridItemDecoration;
 import com.github.jdsjlzx.ItemDecoration.SpacesItemDecoration;
+import com.github.jdsjlzx.interfaces.ILoadMoreFooter;
+import com.github.jdsjlzx.interfaces.IRefreshHeader;
 import com.github.jdsjlzx.interfaces.OnItemClickListener;
 import com.github.jdsjlzx.interfaces.OnLoadMoreListener;
 import com.github.jdsjlzx.interfaces.OnRefreshListener;
 import com.github.jdsjlzx.recyclerview.LRecyclerView;
 import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
+import com.github.jdsjlzx.recyclerview.ProgressStyle;
+import com.github.jdsjlzx.view.LoadingFooter;
 import com.mayinews.mv.R;
 import com.mayinews.mv.base.BaseFragment;
 import com.mayinews.mv.home.activity.NoskinVpActivity;
@@ -85,7 +92,7 @@ public class NewestFragment extends BaseFragment {
     //列表的总页数
     private int totalPages;
     //当前的页数
-    private int currentPage_up = 1;  //上啦加载更多
+    private int currentPage_up = 0;  //上啦加载更多
     private PopupWindow popupWindow;//显示更新的视频条数
 
     @Override
@@ -149,9 +156,9 @@ public class NewestFragment extends BaseFragment {
                         Toast.makeText(mContext, "没有新的数据", Toast.LENGTH_SHORT).show();
                         lRecyclerView.refreshComplete(datas.size());
                         mLRecyclerViewAdapter.notifyDataSetChanged();
+
                     }
-                    check_linear.setVisibility(View.GONE);
-                    progressBar.setVisibility(View.GONE);
+
 
 
                 } else {
@@ -160,6 +167,7 @@ public class NewestFragment extends BaseFragment {
                     progressBar.setVisibility(View.GONE);
                     //提示网不给力，但是还是有视频页面
                     Toast.makeText(mContext, "网络不给力，请检查网络设置", Toast.LENGTH_SHORT).show();
+                    lRecyclerView.refreshComplete(10);
                     mLRecyclerViewAdapter.notifyDataSetChanged();
 
                 }
@@ -242,7 +250,6 @@ public class NewestFragment extends BaseFragment {
         } else {
 
 
-            Toast.makeText(mContext, "网络不给力", Toast.LENGTH_SHORT).show();
             //显示没有网的图片
             check_linear.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);
@@ -255,13 +262,13 @@ public class NewestFragment extends BaseFragment {
 
         if (isPulldownRefresh) { // 下拉刷新
 
-            OkHttpUtils.get().url(Constants.PULLDOWNHEQUEST).addParams("qid", "0").build().execute(new MyCallBack());
+            OkHttpUtils.get().url(Constants.PULLDOWNHEQUEST).build().execute(new MyCallBack());
         } else if (isRefresh) {
             //刷新
 
-            OkHttpUtils.get().url(Constants.REFRESHEQUEST).addParams("qid", "0").build().execute(new MyCallBack());
+            OkHttpUtils.get().url(Constants.REFRESHEQUEST).build().execute(new MyCallBack());
         } else if (isLoadMore) {    // 上拉加载更多--默认
-            OkHttpUtils.get().url(Constants.PULLUPEQUEST + currentPage_up).addParams("qid", "0").build().execute(new MyCallBack());
+            OkHttpUtils.get().url(Constants.REFRESHEQUEST).build().execute(new MyCallBack());
         }
     }
 
@@ -288,8 +295,8 @@ public class NewestFragment extends BaseFragment {
             Log.i("TAG", response);
             VideoLists videoLists = JSON.parseObject(response, VideoLists.class);
             status = videoLists.getStauts();
-            if (status == 1) {
-                count = videoLists.getCount();  //得到数据的总页数
+            count = videoLists.getCount();
+            if (status == 1  && count!=0) {
 //
                 data = videoLists.getResult();
 //
@@ -302,7 +309,7 @@ public class NewestFragment extends BaseFragment {
                     datas.addAll(0, data);
 
                 } else if (isPulldownRefresh) {
-                    //显示popwindows
+//                    显示popwindows
 //                    showPopwindows(count);
                     datas.clear();
                     datas.addAll(0, data);
@@ -314,12 +321,21 @@ public class NewestFragment extends BaseFragment {
 
                 } else {
                     //提示没有数据
+                    Toast.makeText(mContext, "没有新的数据", Toast.LENGTH_SHORT).show();
+                    lRecyclerView.refreshComplete(datas.size());
+                    progressBar.setVisibility(View.GONE);
+                    mLRecyclerViewAdapter.notifyDataSetChanged();
+
+
 
                 }
 
             } else {
                 //请求出错----提示信息请重试
-
+                Toast.makeText(mContext, "没有新的数据", Toast.LENGTH_SHORT).show();
+                lRecyclerView.refreshComplete(datas.size());
+                progressBar.setVisibility(View.GONE);
+                mLRecyclerViewAdapter.notifyDataSetChanged();
             }
 
 
@@ -342,15 +358,18 @@ public class NewestFragment extends BaseFragment {
                 lRecyclerView.addItemDecoration(divider);
                 lRecyclerView.setAdapter(mLRecyclerViewAdapter);
                 lRecyclerView.setPullRefreshEnabled(true);  //允许下拉刷新
+
+
                 lRecyclerView.setLoadMoreEnabled(true);      //允许加载更多
                 progressBar.setVisibility(View.GONE);
-                GridLayoutManager manager = new GridLayoutManager(mContext, 2);
+//                GridLayoutManager manager = new GridLayoutManager(mContext, 2);
                 //setLayoutManager
                 final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
                 layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                 //防止item位置互换
                 layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
-
+                lRecyclerView.setPullRefreshEnabled(false);
+                lRecyclerView.setLoadMoreEnabled(false);
 
                 lRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                     @Override

@@ -15,8 +15,8 @@
     </com.github.jdsjlzx.recyclerview.LRecyclerView>
    <ProgressBar
        android:id="@+id/head_progressBar"
-       android:visibility="gone"
-       android:indeterminateDrawable="@drawable/anim"
+
+
        android:layout_centerInParent="true"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content" />

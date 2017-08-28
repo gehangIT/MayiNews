@@ -18,6 +18,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -32,11 +33,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aliyun.common.utils.ToastUtil;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.load.model.LazyHeaders;
+import com.mayinews.mv.JNI;
+import com.mayinews.mv.MyApplication;
 import com.mayinews.mv.R;
 import com.mayinews.mv.discovery.activity.PublishActivity;
 import com.mayinews.mv.user.adapter.MyGridViewAdapter;
 import com.mayinews.mv.user.adapter.MyViewPagerAdapter;
+import com.mayinews.mv.utils.Constants;
+import com.mayinews.mv.utils.SPUtils;
 import com.nanchen.compresshelper.CompressHelper;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -45,8 +55,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.Call;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 public class PersonIconActivity extends AppCompatActivity implements View.OnClickListener {
-    private boolean isPjoto=false;//标记是否为照相或者相册来查看头像
+    private boolean isPjoto = false;//标记是否为照相或者相册来查看头像
     private Bitmap testbitmap;//没保存之前显示的头像
     private static final int TAKE_PHOTO = 1;
     private static final int CHOOSE_FROM_ALBUM = 2;
@@ -58,7 +75,7 @@ public class PersonIconActivity extends AppCompatActivity implements View.OnClic
     //图片的资源
     private int[] images = {R.drawable.mu, R.drawable.mv, R.drawable.mw, R.drawable.mx, R.drawable.my
             , R.drawable.mz, R.drawable.mt, R.drawable.n0, R.drawable.n1, R.drawable.n2, R.drawable.n3,
-            R.drawable.n4, R.drawable.n5, R.drawable.n6, R.drawable.n8, R.drawable.n8};
+            R.drawable.n4, R.drawable.n5, R.drawable.n6, R.drawable.n7, R.drawable.n8};
     private List<View> viewPagerList;   //将每个GridView添加到ViewPager的适配器中
     private int totalPage = 2; //总的页数
     private int mPageSize = 8; //每页显示的最大的数量
@@ -148,51 +165,83 @@ public class PersonIconActivity extends AppCompatActivity implements View.OnClic
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HeadBitmap=testbitmap;
-                if(HeadBitmap==null){
 
+                JNI jni = new JNI();
+                String key = jni.getString();
+                String token = (String) SPUtils.get(PersonIconActivity.this, key, "");
+                Log.i("TAG","token="+token);
+                String uid = (String) SPUtils.get(PersonIconActivity.this, MyApplication.USERUID, "");
+
+
+                HeadBitmap = testbitmap;
+                if (HeadBitmap == null) {
                     Drawable drawable = getResources().getDrawable(images[0]);
                     HeadBitmap = ((BitmapDrawable) drawable).getBitmap();
-                }else{
+                  }
 
 
+                    //保存头像
+                    // 创建一个位于SD卡上的文件
+                    File file = new File(getExternalCacheDir(),
+                            "head.jpeg");
+                    if (file.exists()) {
 
-
-
-                //保存头像
-                // 创建一个位于SD卡上的文件
-                File file = new File(getExternalCacheDir(),
-                        "head.jpeg");
-                if(file.exists()){
-
-                    file.delete();
-                    try {
-                        file.createNewFile();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                        file.delete();
+                        try {
+                            file.createNewFile();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
-                }
-                FileOutputStream out = null;
+                    FileOutputStream out = null;
 
-                // 打开指定文件输出流
-                try {
-                    out = new FileOutputStream(file);
-                    // 将位图输出到指定文件
-                    HeadBitmap.compress(Bitmap.CompressFormat.JPEG, 100,
-                            out);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }finally {
+                    // 打开指定文件输出流
                     try {
-                        out.close();
-                    } catch (IOException e) {
+                        out = new FileOutputStream(file);
+                        // 将位图输出到指定文件
+                        HeadBitmap.compress(Bitmap.CompressFormat.JPEG, 100,
+                                out);
+                    } catch (FileNotFoundException e) {
                         e.printStackTrace();
+                    } finally {
+                        try {
+                            out.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
-                }
+                    Log.i("TAG",file+"");
+                     OkHttpUtils
+                             .post()
+                             .url(Constants.UPDOWNUSERICON)
+                             .addHeader("Authorization","Bearer "+token)
+                             .addFile("file","head.jpeg",file)
+                             .build()
+
+                        .execute(new StringCallback() {
+                            @Override
+                            public void onError(Call call, Exception e, int id) {
+                                Toast.makeText(PersonIconActivity.this, "上传失败，请稍后再试", Toast.LENGTH_SHORT).show();
+                                finish();
+                                      Log.i("TAG","头像错误="+e.getMessage()+"错误信息"+ e.getLocalizedMessage());
 
 
-                }
-                 finish();
+
+                            }
+
+                            @Override
+                            public void onResponse(String response, int id) {
+                                Log.i("TAG","上传头像"+response);
+                                finish();
+
+                            }
+
+
+                        });
+
+
+
+
 
 
 
@@ -204,20 +253,20 @@ public class PersonIconActivity extends AppCompatActivity implements View.OnClic
         circleView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                       //展示
+                //展示
                 showAlertDialog();
             }
         });
 
 
-
     }
+
     private void showAlertDialog() {
 
-        if(builder==null){
-            builder=new android.support.v7.app.AlertDialog.Builder(PersonIconActivity.this);
-            view=LayoutInflater.from(PersonIconActivity.this).inflate(R.layout.alertdialog,null);
-            dialog=builder.create();
+        if (builder == null) {
+            builder = new android.support.v7.app.AlertDialog.Builder(PersonIconActivity.this);
+            view = LayoutInflater.from(PersonIconActivity.this).inflate(R.layout.alertdialog, null);
+            dialog = builder.create();
             Window window = dialog.getWindow();
             dialog.setView(view);
             window.setWindowAnimations(R.style.dialog_style);
@@ -227,14 +276,14 @@ public class PersonIconActivity extends AppCompatActivity implements View.OnClic
 
         }
 
-        if(dialog.isShowing()){
+        if (dialog.isShowing()) {
             dialog.dismiss();
-        }else{
+        } else {
             dialog.show();
             WindowManager windowManager = getWindowManager();
             Display display = windowManager.getDefaultDisplay();
             WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
-            lp.width = (int)(display.getWidth()); //设置宽度
+            lp.width = (int) (display.getWidth()); //设置宽度
             dialog.getWindow().setAttributes(lp);
         }
 
@@ -302,12 +351,11 @@ public class PersonIconActivity extends AppCompatActivity implements View.OnClic
     }
 
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-                   isPjoto=true;
+            isPjoto = true;
             if (requestCode == TAKE_PHOTO) {
                 Log.i("TAG", "压缩文件地址为=" + outputImage.getAbsolutePath());
                 File newFile = new CompressHelper.Builder(this)
@@ -342,7 +390,6 @@ public class PersonIconActivity extends AppCompatActivity implements View.OnClic
 
         }
     }
-
 
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -411,14 +458,34 @@ public class PersonIconActivity extends AppCompatActivity implements View.OnClic
             Toast.makeText(this, "failed to get image", Toast.LENGTH_SHORT).show();
         }
     }
+
     @Override
     protected void onResume() {
         super.onResume();
-        if(!isPjoto) {
+        if (!isPjoto) {
             Bitmap bitmap = BitmapFactory.decodeFile(getExternalCacheDir().getAbsolutePath() + "/head.jpeg");
             if (bitmap != null) {
                 circleView.setImageBitmap(bitmap);
+            }else{
+
+
+                    String iconurl= (String) SPUtils.get(this, MyApplication.USERICON, "");
+                    if(!iconurl.equals("")){
+                        Glide.with(this).load(buildGlideUrl(iconurl)).into(circleView);
+                    }
+
+
+
             }
+        }
+    }
+
+
+    private GlideUrl buildGlideUrl(String url) {
+        if (TextUtils.isEmpty(url)) {
+            return null;
+        } else {
+            return new GlideUrl(url, new LazyHeaders.Builder().addHeader("Referer", "http://www.mayinews.com").build());
         }
     }
 }

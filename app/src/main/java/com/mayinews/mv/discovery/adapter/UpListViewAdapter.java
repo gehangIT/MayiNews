@@ -3,6 +3,7 @@ package com.mayinews.mv.discovery.adapter;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.load.model.LazyHeaders;
 import com.mayinews.mv.R;
 
 /**
@@ -54,9 +57,9 @@ public class UpListViewAdapter extends BaseAdapter {
         }else{
             viewHolder= (ViewHolder) convertView.getTag();
         }
-        UpItemRcAdapter adapter = new UpItemRcAdapter(context);
-        viewHolder.recyclerView.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false));
-        viewHolder.recyclerView.setAdapter(adapter);
+////        UpItemRcAdapter adapter = new UpItemRcAdapter(context,);
+//        viewHolder.recyclerView.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false));
+//        viewHolder.recyclerView.setAdapter(adapter);
         return convertView;
     }
 
@@ -66,4 +69,6 @@ public class UpListViewAdapter extends BaseAdapter {
         TextView authorSign;
         RecyclerView recyclerView;
     }
+
+
 }

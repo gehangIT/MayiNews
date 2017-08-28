@@ -40,6 +40,7 @@ public class DiscoveryFragment extends BaseFragment {
 //        View header = LayoutInflater.from(mContext).inflate(R.layout.discovery_head,(ViewGroup)view.findViewById(android.R.id.content), false);
         CommonHeader headerView = new CommonHeader(getActivity(), R.layout.discovery_head);
         MyDcAdapter myDcAdapter = new MyDcAdapter(mContext);
+        mRecyclerView.setPullRefreshEnabled(false);
         mRecyclerView.setNestedScrollingEnabled(false);  //不允许嵌套的滑动
         LRecyclerViewAdapter lRecyclerViewAdapter = new LRecyclerViewAdapter(myDcAdapter);
         lRecyclerViewAdapter.addHeaderView(headerView);
@@ -60,4 +61,9 @@ public class DiscoveryFragment extends BaseFragment {
 
     }
 
+    @Override
+    protected void initData() {
+        //请求数据
+
+    }
 }

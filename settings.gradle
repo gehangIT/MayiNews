@@ -1,1 +1,1 @@
-include ':app', ':LRecyclerview_library', ':QuSdk-RC', ':banner', ':compresshelper'
+include ':app', ':LRecyclerview_library', ':QuSdk-RC', ':banner', ':compresshelper', ':base-adapter-library'

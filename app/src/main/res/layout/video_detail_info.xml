@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@color/white"
-    android:padding="8dp"
+    android:paddingLeft="8dp"
+    android:paddingTop="8dp"
+    android:paddingRight="8dp"
     android:layout_marginBottom="2dp"
     >
 
@@ -55,7 +58,7 @@
             android:textColor="#AFAFAF"
             android:id="@+id/collection"
             android:drawablePadding="4dp"
-            android:textSize="14sp"
+            android:textSize="12sp"
             android:text="收藏"
             android:button="@null"
             android:drawableLeft="@drawable/collection_selector"
@@ -105,16 +108,17 @@
             android:text="小路社会"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-        <TextView
-
+        <CheckBox
+            android:button="@null"
             android:gravity="center"
             android:id="@+id/tv_atten"
             android:textSize="12sp"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:text="+订阅"
-            android:background="@drawable/pubic_bg_subscribe_short"
+            android:text="＋订阅"
+            android:background="@drawable/subscribe_selector"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/tv_userName"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
     </RelativeLayout>
 </LinearLayout>

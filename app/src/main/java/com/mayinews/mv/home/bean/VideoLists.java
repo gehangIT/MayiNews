@@ -64,6 +64,11 @@ public class VideoLists {
          * view : 0
          */
 
+
+
+
+
+
         private String cid;
         private String comment;
         private String cover;
@@ -75,7 +80,7 @@ public class VideoLists {
         private String title;
         private String uid;
         private String update_time;
-        private String user;
+        private String nickname;
         private String vid;
         private String view;
 
@@ -94,7 +99,7 @@ public class VideoLists {
             title = in.readString();
             uid = in.readString();
             update_time = in.readString();
-            user = in.readString();
+            nickname = in.readString();
             vid = in.readString();
             view = in.readString();
         }
@@ -199,12 +204,12 @@ public class VideoLists {
             this.update_time = update_time;
         }
 
-        public String getUser() {
-            return user;
+        public String getNickname() {
+            return nickname;
         }
 
-        public void setUser(String user) {
-            this.user = user;
+        public void setNickname(String nickname) {
+            this.nickname = nickname;
         }
 
         public String getVid() {
@@ -241,7 +246,7 @@ public class VideoLists {
             dest.writeString(title);
             dest.writeString(uid);
             dest.writeString(update_time);
-            dest.writeString(user);
+            dest.writeString(nickname);
             dest.writeString(vid);
             dest.writeString(view);
         }

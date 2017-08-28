@@ -24,6 +24,7 @@ import com.github.jdsjlzx.interfaces.OnLoadMoreListener;
 import com.github.jdsjlzx.interfaces.OnRefreshListener;
 import com.github.jdsjlzx.recyclerview.LRecyclerView;
 import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
+import com.mayinews.mv.MyApplication;
 import com.mayinews.mv.R;
 import com.mayinews.mv.base.BaseFragment;
 import com.mayinews.mv.home.activity.NoskinVpActivity;
@@ -69,8 +70,8 @@ public class SiftFragment extends BaseFragment {
     private ProgressBar progressBar;
     private LinearLayout check_linear;
     private LRecyclerViewAdapter mLRecyclerViewAdapter = null;
-    private boolean isPulldownRefresh = true;    //是否下拉刷新
-    private boolean isLoadMore = false;   //是否上拉加载更多
+    private boolean isPulldownRefresh = false;    //是否下拉刷新
+    private boolean isLoadMore = true;   //是否上拉加载更多
     private boolean isRefresh = false;    //在页面时就刷新
     private List<VideoLists.ResultBean> datas = new ArrayList();
     List<VideoLists.ResultBean> data;
@@ -236,7 +237,6 @@ public class SiftFragment extends BaseFragment {
         } else {
 
 
-            Toast.makeText(mContext, "网络不给力", Toast.LENGTH_SHORT).show();
             //显示没有网的图片
             check_linear.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);
@@ -249,13 +249,13 @@ public class SiftFragment extends BaseFragment {
 
         if (isPulldownRefresh) { // 下拉刷新
 
-            OkHttpUtils.get().url(Constants.PULLDOWNHEQUEST).addParams("qid", "0").build().execute(new MyCallBack());
+            OkHttpUtils.get().url(Constants.PULLDOWNHEQUEST).build().execute(new MyCallBack());
         } else if (isRefresh) {
             //刷新
 
-            OkHttpUtils.get().url(Constants.REFRESHEQUEST).addParams("qid", "0").build().execute(new MyCallBack());
+            OkHttpUtils.get().url(Constants.REFRESHEQUEST).build().execute(new MyCallBack());
         } else if (isLoadMore) {    // 上拉加载更多--默认
-            OkHttpUtils.get().url(Constants.PULLUPEQUEST + currentPage_up).addParams("qid", "0").build().execute(new MyCallBack());
+            OkHttpUtils.get().url(Constants.PULLUPEQUEST+0+"/pgnum/" + currentPage_up).build().execute(new MyCallBack());
         }
     }
 
@@ -282,8 +282,8 @@ public class SiftFragment extends BaseFragment {
             Log.i("TAG", response);
             VideoLists videoLists = JSON.parseObject(response, VideoLists.class);
             status = videoLists.getStauts();
-            if (status == 1) {
-                count = videoLists.getCount();  //得到数据的总页数
+            count = videoLists.getCount();
+            if (status == 1  && count!=0) {
 //
                 data = videoLists.getResult();
 //
@@ -296,7 +296,7 @@ public class SiftFragment extends BaseFragment {
                     datas.addAll(0, data);
 
                 } else if (isPulldownRefresh) {
-                    //显示popwindows
+//                    显示popwindows
 //                    showPopwindows(count);
                     datas.clear();
                     datas.addAll(0, data);
@@ -308,12 +308,21 @@ public class SiftFragment extends BaseFragment {
 
                 } else {
                     //提示没有数据
+                    Toast.makeText(mContext, "没有新的数据", Toast.LENGTH_SHORT).show();
+                    lRecyclerView.refreshComplete(datas.size());
+                    progressBar.setVisibility(View.GONE);
+                    mLRecyclerViewAdapter.notifyDataSetChanged();
+
+
 
                 }
 
             } else {
                 //请求出错----提示信息请重试
-
+                Toast.makeText(mContext, "没有新的数据", Toast.LENGTH_SHORT).show();
+                lRecyclerView.refreshComplete(datas.size());
+                progressBar.setVisibility(View.GONE);
+                mLRecyclerViewAdapter.notifyDataSetChanged();
             }
 
 

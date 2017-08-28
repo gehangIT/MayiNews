@@ -20,6 +20,7 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -34,6 +35,9 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.load.model.LazyHeaders;
 import com.mayinews.mv.MyApplication;
 import com.mayinews.mv.R;
 import com.mayinews.mv.user.fragment.UserFragment;
@@ -375,8 +379,25 @@ public class PersonDataActivity extends Activity implements View.OnClickListener
         if(bitmap!=null){
 
             ivheadIcon.setImageBitmap(bitmap);
+
+        }else{
+            String iconurl= (String) SPUtils.get(this, MyApplication.USERICON, "");
+            if(!iconurl.equals("")){
+                Glide.with(this).load(buildGlideUrl(iconurl)).into(ivheadIcon);
+            }
+
+
         }
 
 
+    }
+
+
+    private GlideUrl buildGlideUrl(String url) {
+        if (TextUtils.isEmpty(url)) {
+            return null;
+        } else {
+            return new GlideUrl(url, new LazyHeaders.Builder().addHeader("Referer", "http://www.mayinews.com").build());
+        }
     }
 }
